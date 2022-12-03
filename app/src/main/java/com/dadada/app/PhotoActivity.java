@@ -1,12 +1,13 @@
 package com.dadada.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class PhotoActivity extends AppCompatActivity {
     ImageView photoBtn, backBtn;
+    Button takePhotoBtn, selectPhotoBtn;
     BottomSheetDialog bottomSheetDialog;
 
     @Override
@@ -35,6 +37,8 @@ public class PhotoActivity extends AppCompatActivity {
 
         photoBtn = findViewById(R.id.photoBtn);
         backBtn = findViewById(R.id.backBtn);
+        takePhotoBtn = bottomSheetDialog.findViewById(R.id.takePhotoBtn);
+        selectPhotoBtn = bottomSheetDialog.findViewById(R.id.selectPhotoBtn);
 
         photoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +53,22 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PhotoActivity.this, MapActivity.class);
+                startActivity(i);
+            }
+        });
+
+        takePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PhotoActivity.this, CameraActivity.class);
+                startActivity(i);
+            }
+        });
+
+        selectPhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PhotoActivity.this, CameraActivity.class);
                 startActivity(i);
             }
         });
