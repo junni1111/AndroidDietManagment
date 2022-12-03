@@ -4,8 +4,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/bottomSheetlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:behavior_hideable="false"
+        android:layout_height="320dp"
         android:background="@drawable/r12_bottom_sheet_white"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

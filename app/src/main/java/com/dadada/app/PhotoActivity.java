@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class PhotoActivity extends AppCompatActivity {
@@ -30,6 +31,7 @@ public class PhotoActivity extends AppCompatActivity {
         View view = inflater.inflate(R.layout.bottom_sheet_group_photo, null, false);
         bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
 
         photoBtn = findViewById(R.id.photoBtn);
         backBtn = findViewById(R.id.backBtn);
