@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:text="정확하지 않아도 괜찮아요!"
         android:textColor="#666666"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
