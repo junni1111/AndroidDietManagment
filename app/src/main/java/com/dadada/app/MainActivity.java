@@ -1,45 +1,63 @@
 package com.dadada.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.dadada.app.model.DietLog;
+import com.dadada.app.recyclerView.DietAdapter;
+import com.dadada.app.viewmodel.MainActivityViewModel;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback
-{
-    private GoogleMap map;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView view;
+    private RecyclerView.LayoutManager layoutManager;
+    public static DietAdapter adapter;
+    Button btn;
+
+
+    public static MainActivityViewModel mainActivityViewModel;
+    private ArrayList<List<DietLog>> dietLogs;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(MainActivity.this);
+        view = findViewById(R.id.RVdiet);
+        adapter = new DietAdapter(this);
+        setAdapter();
+
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mainActivityViewModel.getAllDietLogs().observe(this, dietLogs -> adapter.setData(dietLogs));
+
+
+        btn = findViewById(R.id.BTcamera);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent i = new Intent(MainActivity.this, CameraActivity.class);
+                Intent i = new Intent(MainActivity.this, PhotoActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
-        map = googleMap;
-
-        LatLng seoul = new LatLng(37.56, 126.97);
-
-        MarkerOptions options = new MarkerOptions();
-        options.position(seoul)
-                .title("서울")
-                .snippet("한국의 수도");
-        map.addMarker(options);
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul, 10));
+    void setAdapter() {
+        view.setLayoutManager(new LinearLayoutManager(this));
+        view.setHasFixedSize(true);
+        view.setItemAnimator(new DefaultItemAnimator());
+        view.setAdapter(adapter);
     }
+
 }
