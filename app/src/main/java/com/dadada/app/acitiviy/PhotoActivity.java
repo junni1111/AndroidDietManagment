@@ -1,9 +1,10 @@
-package com.dadada.app;
+package com.dadada.app.acitiviy;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,52 +16,79 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.dadada.app.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CameraActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity {
 
     private static final int IMAGE_FROM_CAMERA = 11;
     private static final int IMAGE_FROM_GALLERY = 22;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int MY_GALLERY_PERMISSION_CODE = 101;
-    private ImageView imageView;
-    private String currentPhotoPath;
+    private String currentPhotoPath = "";
 
+    ImageView photoBtn, backBtn;
+    Button takePhotoBtn, selectPhotoBtn;
+    BottomSheetDialog bottomSheetDialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_photo);
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
-        imageView = (ImageView) findViewById(R.id.imageView1);
-        Button photoButton = (Button) findViewById(R.id.button1);
-        Button galleryButton = (Button) findViewById(R.id.button2);
-        Button addDiet = (Button) findViewById(R.id.button3);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.bottom_sheet_group_photo, null, false);
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
 
-        photoButton.setOnClickListener(new View.OnClickListener() {
+        photoBtn = findViewById(R.id.photoBtn);
+        backBtn = findViewById(R.id.backBtn);
+        takePhotoBtn = bottomSheetDialog.findViewById(R.id.takePhotoBtn);
+        selectPhotoBtn = bottomSheetDialog.findViewById(R.id.selectPhotoBtn);
+
+        photoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomSheetDialog.show();
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PhotoActivity.this, MapActivity.class);
+                startActivity(i);
+            }
+        });
+
+        takePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.cancel();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                            ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                            ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                            checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                            checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_CAMERA_PERMISSION_CODE);
                     } else {
                         takePicture();
@@ -69,39 +97,22 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        galleryButton.setOnClickListener(new View.OnClickListener() {
+        selectPhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bottomSheetDialog.cancel();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_GALLERY_PERMISSION_CODE);
                     } else {
-                        getPictureFromGallery();
+                        selectPhoto();
                     }
                 }
             }
         });
-
-        addDiet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addPicture();
-            }
-        });
     }
 
-    private void addPicture() {
-        Log.d("picture", currentPhotoPath);
-        Intent i = new Intent(CameraActivity.this, MainActivity.class);
-        i.putExtra("imgPath", currentPhotoPath);
-
-//        MainActivity.mainActivityViewModel.addNewDietLog(new DietLog("김밥", 1, 123, currentPhotoPath, "서울특별시", "2020-03-01", "09:00:00"));
-
-        startActivity(i);
-        finish();
-    }
-
-    private void takePicture() {
+    void takePicture() {
         String filename = "photo";
         File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         try {
@@ -109,7 +120,7 @@ public class CameraActivity extends AppCompatActivity {
 
             currentPhotoPath = fileImage.getAbsolutePath();
 
-            Uri uri = getUriForFile(CameraActivity.this, "com.dadada.app.fileprovider", fileImage);
+            Uri uri = getUriForFile(PhotoActivity.this, "com.dadada.app.fileprovider", fileImage);
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -119,29 +130,22 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private void getPictureFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, IMAGE_FROM_GALLERY);
-    }
+    void selectPhoto() {
+        String filename = "photo";
+        File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        try {
+            File fileImage = File.createTempFile(filename, ".jpg", storageDirectory);
 
+            currentPhotoPath = fileImage.getAbsolutePath();
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                takePicture();
-            }
-        }
+            Uri uri = getUriForFile(PhotoActivity.this, "com.dadada.app.fileprovider", fileImage);
 
-        if (requestCode == MY_GALLERY_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getPictureFromGallery();
-            }
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, IMAGE_FROM_GALLERY);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -153,7 +157,7 @@ public class CameraActivity extends AppCompatActivity {
                 File file = new File(currentPhotoPath);
                 Log.d("file", currentPhotoPath);
 
-                Glide.with(this).load(Uri.fromFile(file)).into(imageView);
+                Glide.with(this).load(Uri.fromFile(file)).into(photoBtn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -161,15 +165,19 @@ public class CameraActivity extends AppCompatActivity {
             try {
                 // 선택한 이미지에서 비트맵 생성
                 InputStream in = getContentResolver().openInputStream(data.getData());
-                Bitmap img = BitmapFactory.decodeStream(in);
+                Bitmap bitmap = BitmapFactory.decodeStream(in);
                 in.close();
 
+                // 비트맵을 임시 파일에 저장
+                File file = new File(currentPhotoPath);
+                FileOutputStream output = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+
                 // 이미지 표시
-                Glide.with(this).load(data.getData()).into(imageView);
+                Glide.with(this).load(Uri.fromFile(file)).into(photoBtn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

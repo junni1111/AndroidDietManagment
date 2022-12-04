@@ -1,14 +1,13 @@
-package com.dadada.app;
-
-import android.os.Bundle;
+package com.dadada.app.acitiviy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SearchActivity extends AppCompatActivity {
+import android.os.Bundle;
+
+public class QuantityActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
     }
 }

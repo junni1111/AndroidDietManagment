@@ -1,4 +1,4 @@
-package com.dadada.app;
+package com.dadada.app.acitiviy;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dadada.app.R;
 import com.dadada.app.model.DietLog;
 import com.dadada.app.recyclerView.DietAdapter;
 import com.dadada.app.viewmodel.MainActivityViewModel;

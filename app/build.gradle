@@ -58,4 +58,5 @@ dependencies {
 
     //simpleRatingBar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
+
 }
