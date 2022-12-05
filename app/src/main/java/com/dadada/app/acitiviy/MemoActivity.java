@@ -50,9 +50,9 @@ public class MemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String contentText = contentEdt.getText().toString().trim();
-                if (contentText.equals("")) {
-                    return;
-                }
+//                if (contentText.equals("")) {
+//                    return;
+//                }
                 Intent i = new Intent(MemoActivity.this, RatingActivity.class);
                 data.setMemo(contentText);
                 i.putExtra("data", data);

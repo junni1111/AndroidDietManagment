@@ -202,6 +202,9 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
             return null;
         }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location == null) {
+            return new LatLng(37.5666805, 126.9784147);
+        }
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 }
