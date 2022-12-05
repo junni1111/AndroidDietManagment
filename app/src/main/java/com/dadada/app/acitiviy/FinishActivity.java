@@ -44,7 +44,7 @@ public class FinishActivity extends AppCompatActivity {
                         data.getImagePath(), "", data.getDay(), data.getTime());
                 mainActivityViewModel.addNewDietLog(dietLog);
 
-                Intent i = new Intent(FinishActivity.this, MapActivity.class);
+                Intent i = new Intent(FinishActivity.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }

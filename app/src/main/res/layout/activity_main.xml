@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:text="사진찍기"
+            android:text="지도보기"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/RVdiet"
             app:layout_constraintTop_toTopOf="parent" />

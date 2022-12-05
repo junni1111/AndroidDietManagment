@@ -32,7 +32,6 @@ public class DietLog extends BaseObservable {
     @ColumnInfo(name = "diet_date_day")
     private String day;
 
-
     @ColumnInfo(name = "diet_date_time")
     private String time;
 
