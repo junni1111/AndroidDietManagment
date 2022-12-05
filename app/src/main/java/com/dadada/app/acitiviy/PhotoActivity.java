@@ -192,7 +192,7 @@ public class PhotoActivity extends AppCompatActivity {
                 Glide.with(this).load(Uri.fromFile(file)).into(photoBtn);
 
                 // 다음 버튼 색 조절
-                setBackBtnSelectedMode();
+                setNextBtnSelectedMode();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -212,7 +212,7 @@ public class PhotoActivity extends AppCompatActivity {
                 Glide.with(this).load(Uri.fromFile(file)).into(photoBtn);
 
                 // 다음 버튼 색 조절
-                setBackBtnSelectedMode();
+                setNextBtnSelectedMode();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -220,7 +220,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void setBackBtnSelectedMode() {
+    public void setNextBtnSelectedMode() {
         nextBtn.setBackground(this.getResources().getDrawable(R.drawable.r12_primary_solid));
     }
 }
