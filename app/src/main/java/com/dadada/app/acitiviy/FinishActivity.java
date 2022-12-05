@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dadada.app.R;
+import com.dadada.app.model.DietLog;
 import com.dadada.app.parcelable.DietParcelable;
+import com.dadada.app.viewmodel.MainActivityViewModel;
 
 public class FinishActivity extends AppCompatActivity {
     private DietParcelable data;
     private Button nextBtn;
+    public static MainActivityViewModel mainActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +35,15 @@ public class FinishActivity extends AppCompatActivity {
 
 
         nextBtn = findViewById(R.id.nextBtn);
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DietLog dietLog = new DietLog(data.getName(), 1, 235,
+                        data.getImagePath(), "", data.getDay(), data.getTime());
+                mainActivityViewModel.addNewDietLog(dietLog);
+
                 Intent i = new Intent(FinishActivity.this, MapActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,8 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dadada.app.R;
+import com.dadada.app.model.DietLog;
+import com.dadada.app.viewmodel.MainActivityViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,6 +44,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
     private boolean test = false;
     private LocationManager lm = null;
     private LatLng selectedLocation = null;
+    public static MainActivityViewModel mainActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +87,21 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
         });
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
+        mainActivityViewModel.getAllDietLogs().observe(this, dietLogs -> {
+            for (DietLog dietLog : dietLogs) {
+                Log.d("dietLog", dietLog.getFoodName());
+                Log.d("dietLog", "" + dietLog.getFoodCount());
+                Log.d("dietLog", "" + dietLog.getFoodCalorie());
+                Log.d("dietLog", dietLog.getImagePath());
+                Log.d("dietLog", dietLog.getAddress());
+                Log.d("dietLog", dietLog.getDay());
+                Log.d("dietLog", dietLog.getTime());
+            }
+        });
+
     }
 
     @Override
@@ -103,9 +123,9 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getCurrentLatLng(), 18));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(getCurrentLatLng(), 18));
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
                 Toast.makeText(MapActivity.this, "" + getCurrentAddress(point),
@@ -177,7 +197,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
         }
     }
 
-    LatLng getCurrentLatLng() {
+    public LatLng getCurrentLatLng() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return null;
         }

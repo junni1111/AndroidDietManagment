@@ -42,6 +42,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int MY_GALLERY_PERMISSION_CODE = 101;
     private String currentPhotoPath = "";
+    private boolean isPhotoSelected = false;
 
     ImageView photoBtn, backBtn;
     Button takePhotoBtn, selectPhotoBtn, nextBtn;
@@ -112,8 +113,7 @@ public class PhotoActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPhotoPath.equals("")) return;
-
+                if (currentPhotoPath.equals("") || !isPhotoSelected) return;
                 Intent searchIntent = new Intent(PhotoActivity.this, SearchActivity.class);
 
                 DietParcelable data = new DietParcelable("", "", 0, ""
@@ -193,6 +193,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                 // 다음 버튼 색 조절
                 setNextBtnSelectedMode();
+                isPhotoSelected = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -213,6 +214,7 @@ public class PhotoActivity extends AppCompatActivity {
 
                 // 다음 버튼 색 조절
                 setNextBtnSelectedMode();
+                isPhotoSelected = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
