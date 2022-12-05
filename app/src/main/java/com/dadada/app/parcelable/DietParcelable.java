@@ -107,6 +107,7 @@ public class DietParcelable implements Parcelable {
         quantity = in.readString();
         day = in.readString();
         time = in.readString();
+        memo = in.readString();
         rating = in.readInt();
     }
 
@@ -124,6 +125,7 @@ public class DietParcelable implements Parcelable {
         dest.writeString(quantity);
         dest.writeString(day);
         dest.writeString(time);
+        dest.writeString(memo);
         dest.writeInt(rating);
     }
 
