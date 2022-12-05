@@ -55,19 +55,17 @@ public class CategoryActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (categoryAdapter.getCheckedItemCount() == 0) return;
+
                 Boolean[] isChecked = categoryAdapter.getIsChecked();
                 StringBuilder categoryString = new StringBuilder();
-                boolean isAllFalse = true;
 
                 for (int idx = 0; idx < isChecked.length; idx++) {
                     if (isChecked[idx]) {
                         String category = categories.get(idx);
                         categoryString.append(".").append(category);
-                        isAllFalse = false;
                     }
                 }
-
-                if (isAllFalse) return;
 
                 Intent i = new Intent(CategoryActivity.this, QuantityActivity.class);
                 data.setCategory(categoryString.toString());

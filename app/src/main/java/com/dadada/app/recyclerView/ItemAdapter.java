@@ -49,6 +49,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
         return this.isChecked;
     }
 
+    public int getCheckedItemCount() {
+        return this.checkedItemCount;
+    }
+
     public ItemAdapter(Context context, ArrayList<String> keywords, int maxCheckedCount) {
         this.keywords = keywords;
         this.context = context;
