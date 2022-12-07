@@ -18,8 +18,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     // live data
     private LiveData<List<DietLog>> allDietLogs;
+    private LiveData<List<DietLog>> allDietLogsByDate;
     private LiveData<List<DietLog>> dietLogById;
     private LiveData<List<DietLog>> dietLogByDay;
+    private int caloriesAfterDate;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -39,6 +41,16 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<List<DietLog>> getDietLogByDay(String day) {
         dietLogByDay = repository.getDietLogByDay(day);
         return dietLogByDay;
+    }
+
+    public LiveData<List<DietLog>> getAllDietLogsByDate() {
+        allDietLogsByDate = repository.getAllDietLogsByDate();
+        return allDietLogsByDate;
+    }
+
+    public int getCaloriesAfterDate(int date) {
+        caloriesAfterDate = repository.getCaloriesAfterDate(date);
+        return caloriesAfterDate;
     }
 
     public void addNewDietLog(DietLog dietLog) {

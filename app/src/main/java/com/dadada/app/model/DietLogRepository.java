@@ -33,6 +33,14 @@ public class DietLogRepository {
         return dietLogDAO.getDietLogByDay(day);
     }
 
+    public LiveData<List<DietLog>> getAllDietLogsByDate() {
+        return dietLogDAO.getAllDietLogsByDate();
+    }
+
+    public int getCaloriesAfterDate(int date) {
+        return dietLogDAO.getCaloriesAfterDate(date);
+    }
+
     public void insertDietLog(DietLog dietLog) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());

@@ -2,11 +2,13 @@ package com.dadada.app.model;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.dadada.app.BR;
+
 
 @Entity(tableName = "diet_log_table")
 public class DietLog extends BaseObservable {
@@ -29,22 +31,47 @@ public class DietLog extends BaseObservable {
     @ColumnInfo(name = "diet_address")
     private String address;
 
+    @ColumnInfo(name = "diet_latlng")
+    private String latlng;
+
+    @ColumnInfo(name = "diet_memo")
+    private String memo;
+
+    @ColumnInfo(name = "diet_categories")
+    private String categories;
+
+    @ColumnInfo(name = "diet_quantitiy")
+    private String quantity;
+
+    @ColumnInfo(name = "diet_rating")
+    private int rating;
+
     @ColumnInfo(name = "diet_date_day")
     private String day;
 
     @ColumnInfo(name = "diet_date_time")
     private String time;
 
+    @ColumnInfo(name = "diet_date")
+    private int date;
+
 
     public DietLog(String foodName, int foodCount, int foodCalorie, String imagePath
-            , String address, String day, String time) {
+            , String address, String latlng, String memo, String categories
+            , String quantity, int rating, String day, String time, int date) {
         this.foodName = foodName;
         this.foodCount = foodCount;
         this.foodCalorie = foodCalorie;
         this.imagePath = imagePath;
         this.address = address;
+        this.latlng = latlng;
+        this.memo = memo;
+        this.categories = categories;
+        this.quantity = quantity;
+        this.rating = rating;
         this.day = day;
         this.time = time;
+        this.date = date;
     }
 
     @Ignore
@@ -112,6 +139,56 @@ public class DietLog extends BaseObservable {
     }
 
     @Bindable
+    public String getLatlng() {
+        return latlng;
+    }
+
+    public void setLatlng(String latlng) {
+        this.latlng = latlng;
+        notifyPropertyChanged(BR.latlng);
+    }
+
+    @Bindable
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+        notifyPropertyChanged(BR.memo);
+    }
+
+    @Bindable
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+        notifyPropertyChanged(BR.categories);
+    }
+
+    @Bindable
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+        notifyPropertyChanged(BR.quantity);
+    }
+
+    @Bindable
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+        notifyPropertyChanged(BR.rating);
+    }
+
+    @Bindable
     public String getDay() {
         return day;
     }
@@ -131,5 +208,14 @@ public class DietLog extends BaseObservable {
         notifyPropertyChanged(BR.time);
     }
 
+    @Bindable
+    public int getDate() {
+        return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
+        notifyPropertyChanged(BR.date);
+    }
 }
 

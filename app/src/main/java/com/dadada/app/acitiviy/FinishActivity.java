@@ -41,8 +41,15 @@ public class FinishActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DietLog dietLog = new DietLog(data.getName(), 1, 235,
-                        data.getImagePath(), "", data.getDay(), data.getTime());
+                        data.getImagePath(), "", "", data.getMemo(), data.getCategory()
+                        , data.getQuantity(), data.getRating(), data.getDay(), data.getTime(), 1);
                 mainActivityViewModel.addNewDietLog(dietLog);
+
+
+//                String foodName, int foodCount, int foodCalorie, String imagePath
+//                        , String address, String latlng, String memo, String categories
+//                        , String quantity, int rating, String day, String time, int date
+
 
                 Intent i = new Intent(FinishActivity.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

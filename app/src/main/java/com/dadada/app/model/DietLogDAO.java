@@ -24,6 +24,12 @@ public interface DietLogDAO {
     @Query("select * from diet_log_table")
     LiveData<List<DietLog>> getAllDietLogs();
 
+    @Query("select * from diet_log_table order by diet_date desc")
+    LiveData<List<DietLog>> getAllDietLogsByDate();
+
+    @Query("select sum(diet_food_calorie) from diet_log_table where diet_date >= :date")
+    int getCaloriesAfterDate(int date);
+
     @Query("select * from diet_log_table where diet_date_day like '%' || :day || '%'")
     LiveData<List<DietLog>> getDietLogByDay(String day);
 

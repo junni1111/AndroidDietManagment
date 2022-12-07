@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dadada.app.R;
-import com.dadada.app.model.DietLog;
 import com.dadada.app.recyclerView.DietAdapter;
 import com.dadada.app.viewmodel.MainActivityViewModel;
 
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = getIntent();
         if (i.getExtras() != null) {
             String currentPhotoPath = i.getStringExtra("imgPath");
-            mainActivityViewModel.addNewDietLog(new DietLog("김밥", 1, 123, currentPhotoPath, "서울특별시", "2020-03-01", "09:00:00"));
+            //mainActivityViewModel.addNewDietLog(new DietLog("김밥", 1, 123, currentPhotoPath, "서울특별시", "2020-03-01", "09:00:00"));
         }
     }
 
