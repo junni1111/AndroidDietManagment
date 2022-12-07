@@ -2,6 +2,7 @@ package com.dadada.app.acitiviy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,8 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dadada.app.R;
+import com.dadada.app.model.DietLogDAO;
+import com.dadada.app.model.DietLogDatabase;
 import com.dadada.app.recyclerView.DietAdapter;
 import com.dadada.app.viewmodel.MainActivityViewModel;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,8 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     public static DietAdapter adapter;
     public static MainActivityViewModel mainActivityViewModel;
+    private MaterialDatePicker datePicker;
+    private String s = "";
+    private DietLogDatabase db;
+    private DietLogDAO dietLogDAO;
 
-    Button btn;
+    Button btn, BTdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +50,45 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         addNewDiet();
 
-        mainActivityViewModel.getAllDietLogsByDate().observe(this, dietLogs -> adapter.setData(dietLogs));
+        datePicker = MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Select date")
+                .build();
 
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+            @Override
+            public void onPositiveButtonClick(Long selectedDate) {
+                TimeZone timeZoneUTC = TimeZone.getDefault();
+                int offsetFromUTC = timeZoneUTC.getOffset(new Date().getTime()) * -1;
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+                Date date = new Date(selectedDate + offsetFromUTC);
+
+                s = simpleFormat.format(date);
+
+                mainActivityViewModel.setInput(s);
+            }
+        });
+
+        mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> adapter.setData(dietLogs));
+
+
+        TimeZone timeZoneUTC = TimeZone.getDefault();
+        // It will be negative, so that's the -1
+        int offsetFromUTC = timeZoneUTC.getOffset(new Date().getTime()) * -1;
+
+        // Create a date format, then a date object with our offset
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm", Locale.KOREA);
+        Date date = new Date(offsetFromUTC);
+
+        Date now = new Date();
+        long oneMonthBefore = (long) now.getTime() - (long) 2592000 * 1000;
+        Log.d("date", simpleFormat.format(new Date()));
+
+        mainActivityViewModel.getCaloriesAfterDate(oneMonthBefore).observe(this, calorie -> Log.d("calorie", "" + calorie));
 
         btn = findViewById(R.id.BTcamera);
+        BTdate = findViewById(R.id.BTdate);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +97,15 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        BTdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker.show(getSupportFragmentManager(), "fragment_tag");
+            }
+        });
     }
+
 
     void setAdapter() {
         view.setLayoutManager(new LinearLayoutManager(this));
