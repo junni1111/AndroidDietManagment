@@ -92,14 +92,14 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
 
         mainActivityViewModel.getAllDietLogs().observe(this, dietLogs -> {
             for (DietLog dietLog : dietLogs) {
-                Log.d("dietLog", dietLog.getFoodName());
-                Log.d("dietLog", "" + dietLog.getFoodCount());
-                Log.d("dietLog", "" + dietLog.getFoodCalorie());
-                Log.d("dietLog", dietLog.getImagePath());
-                Log.d("dietLog", dietLog.getAddress());
-                Log.d("dietLog", dietLog.getDay());
-                Log.d("dietLog", dietLog.getTime());
-                Log.d("dietLog", "" + dietLog.getDate());
+                Log.d("dietLog name", dietLog.getFoodName());
+                Log.d("dietLog food count", "" + dietLog.getFoodCount());
+                Log.d("dietLog food calorie", "" + dietLog.getFoodCalorie());
+                Log.d("dietLog image path", dietLog.getImagePath());
+                Log.d("dietLog address", dietLog.getAddress());
+                Log.d("dietLog day", dietLog.getDay());
+                Log.d("dietLog time", dietLog.getTime());
+                Log.d("dietLog date", "" + dietLog.getDate());
             }
         });
 

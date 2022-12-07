@@ -37,7 +37,7 @@ public class DietLogRepository {
         return dietLogDAO.getAllDietLogsByDate();
     }
 
-    public int getCaloriesAfterDate(int date) {
+    public LiveData<Integer> getCaloriesAfterDate(long date) {
         return dietLogDAO.getCaloriesAfterDate(date);
     }
 

@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dadada.app.model.DietLog;
 import com.dadada.app.model.DietLogRepository;
@@ -20,12 +22,21 @@ public class MainActivityViewModel extends AndroidViewModel {
     private LiveData<List<DietLog>> allDietLogs;
     private LiveData<List<DietLog>> allDietLogsByDate;
     private LiveData<List<DietLog>> dietLogById;
-    private LiveData<List<DietLog>> dietLogByDay;
-    private int caloriesAfterDate;
+    private LiveData<Integer> caloriesAfterDate;
+    private final MutableLiveData<String> dayInput = new MutableLiveData();
+    public final LiveData<List<DietLog>> dietLogByDay =
+            Transformations.switchMap(dayInput, (day) -> {
+                return repository.getDietLogByDay(day);
+            });
+
+    public void setInput(String day) {
+        dayInput.setValue(day);
+    }
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         this.repository = new DietLogRepository(application);
+        dayInput.setValue("");
     }
 
     public LiveData<List<DietLog>> getAllDietLogs() {
@@ -38,20 +49,16 @@ public class MainActivityViewModel extends AndroidViewModel {
         return dietLogById;
     }
 
-    public LiveData<List<DietLog>> getDietLogByDay(String day) {
-        dietLogByDay = repository.getDietLogByDay(day);
-        return dietLogByDay;
-    }
-
     public LiveData<List<DietLog>> getAllDietLogsByDate() {
         allDietLogsByDate = repository.getAllDietLogsByDate();
         return allDietLogsByDate;
     }
 
-    public int getCaloriesAfterDate(int date) {
+    public LiveData<Integer> getCaloriesAfterDate(long date) {
         caloriesAfterDate = repository.getCaloriesAfterDate(date);
         return caloriesAfterDate;
     }
+
 
     public void addNewDietLog(DietLog dietLog) {
         repository.insertDietLog(dietLog);

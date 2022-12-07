@@ -30,9 +30,9 @@ public class DatetimeActivity extends AppCompatActivity {
     private TextView datePickerTxt, timePickerTxt;
     private MaterialDatePicker datePicker;
     private MaterialTimePicker timePicker;
-    private String selectedDay = "", selectedTime = "";
-    private int selectedDate;
+    private String selectedDay, selectedTime;
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,18 +44,31 @@ public class DatetimeActivity extends AppCompatActivity {
         Log.d("datetime", data.getCategory());
         Log.d("datetime", data.getQuantity());
 
+        SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.KOREA);
+        Date now = new Date();
+        selectedDay = dayFormat.format(now);
+        selectedTime = timeFormat.format(now);
+
 
         backBtn = findViewById(R.id.backBtn);
         nextBtn = findViewById(R.id.nextBtn);
         datePickerTxt = findViewById(R.id.datePickerTxt);
         timePickerTxt = findViewById(R.id.timePickerTxt);
 
+        setNextBtnSelectedMode();
+        datePickerTxt.setText(selectedDay);
+        timePickerTxt.setText(selectedTime);
+
         datePicker = MaterialDatePicker.Builder
                 .datePicker()
-                .setTitleText("Select date of birth")
+                .setSelection(now.getTime() + 3600 * 9 * 1000)
+                .setTitleText("Select date")
                 .build();
 
         timePicker = new MaterialTimePicker.Builder()
+                .setHour(Integer.parseInt(timeFormat.format(now).split(":")[0]))
+                .setMinute(Integer.parseInt(timeFormat.format(now).split(":")[1]))
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .build();
 
@@ -77,21 +90,15 @@ public class DatetimeActivity extends AppCompatActivity {
 
                 datePickerTxt.setText(simpleFormat.format(date));
                 selectedDay = simpleFormat.format(date);
-                if (selectedTime != "" && selectedDay != "") {
-                    setNextBtnSelectedMode();
-                }
             }
         });
 
         timePicker.addOnPositiveButtonClickListener(dialog -> {
             int newHour = timePicker.getHour();
             int newMinute = timePicker.getMinute();
-            timePickerTxt.setText(newHour + ":" + newMinute);
-            selectedTime = newHour + ":" + newMinute;
+            timePickerTxt.setText(String.format("%d:%d", newHour, newMinute));
+            selectedTime = String.format("%d:%d", newHour, newMinute);
 
-            if (selectedTime != "" && selectedDay != "") {
-                setNextBtnSelectedMode();
-            }
         });
 
         datePickerTxt.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +125,6 @@ public class DatetimeActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedTime == "" || selectedDay == "") {
-                    return;
-                }
-
                 Intent i = new Intent(DatetimeActivity.this, MemoActivity.class);
                 data.setDay(selectedDay);
                 data.setTime(selectedTime);
