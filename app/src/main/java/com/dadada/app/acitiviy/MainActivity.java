@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         addNewDiet();
 
-        mainActivityViewModel.getAllDietLogs().observe(this, dietLogs -> adapter.setData(dietLogs));
+        mainActivityViewModel.getAllDietLogsByDate().observe(this, dietLogs -> adapter.setData(dietLogs));
 
 
         btn = findViewById(R.id.BTcamera);

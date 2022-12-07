@@ -53,12 +53,12 @@ public class DietLog extends BaseObservable {
     private String time;
 
     @ColumnInfo(name = "diet_date")
-    private int date;
+    private long date;
 
 
     public DietLog(String foodName, int foodCount, int foodCalorie, String imagePath
             , String address, String latlng, String memo, String categories
-            , String quantity, int rating, String day, String time, int date) {
+            , String quantity, int rating, String day, String time, long date) {
         this.foodName = foodName;
         this.foodCount = foodCount;
         this.foodCalorie = foodCalorie;
@@ -209,11 +209,11 @@ public class DietLog extends BaseObservable {
     }
 
     @Bindable
-    public int getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(long date) {
         this.date = date;
         notifyPropertyChanged(BR.date);
     }

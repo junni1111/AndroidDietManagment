@@ -99,6 +99,7 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
                 Log.d("dietLog", dietLog.getAddress());
                 Log.d("dietLog", dietLog.getDay());
                 Log.d("dietLog", dietLog.getTime());
+                Log.d("dietLog", "" + dietLog.getDate());
             }
         });
 
