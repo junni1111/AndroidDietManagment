@@ -27,11 +27,16 @@ public class RatingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rating);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("rating", data.getAddress());
+        Log.d("rating", data.getLatlng());
         Log.d("rating", data.getImagePath());
         Log.d("rating", data.getName());
+        Log.d("rating", "" + data.getCount());
+        Log.d("rating", "" + data.getCalorie());
         Log.d("rating", data.getCategory());
         Log.d("rating", data.getQuantity());
-        Log.d("rating", data.getDay() + " " + data.getTime());
+        Log.d("rating", data.getDay());
+        Log.d("rating", data.getTime());
         Log.d("rating", data.getMemo());
 
 

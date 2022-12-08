@@ -39,8 +39,12 @@ public class DatetimeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_datetime);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("datetime", data.getAddress());
+        Log.d("datetime", data.getLatlng());
         Log.d("datetime", data.getImagePath());
         Log.d("datetime", data.getName());
+        Log.d("datetime", "" + data.getCount());
+        Log.d("datetime", "" + data.getCalorie());
         Log.d("datetime", data.getCategory());
         Log.d("datetime", data.getQuantity());
 

@@ -28,11 +28,16 @@ public class MemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_memo);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("memo", data.getAddress());
+        Log.d("memo", data.getLatlng());
         Log.d("memo", data.getImagePath());
         Log.d("memo", data.getName());
+        Log.d("memo", "" + data.getCount());
+        Log.d("memo", "" + data.getCalorie());
         Log.d("memo", data.getCategory());
         Log.d("memo", data.getQuantity());
-        Log.d("memo", data.getDay() + " " + data.getTime());
+        Log.d("memo", data.getDay());
+        Log.d("memo", data.getTime());
 
 
         backBtn = findViewById(R.id.backBtn);

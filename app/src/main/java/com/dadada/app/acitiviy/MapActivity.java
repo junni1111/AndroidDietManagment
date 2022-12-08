@@ -1,6 +1,7 @@
 package com.dadada.app.acitiviy;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dadada.app.R;
 import com.dadada.app.model.DietLog;
+import com.dadada.app.parcelable.DietParcelable;
 import com.dadada.app.viewmodel.MainActivityViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +32,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,11 +49,17 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
     private LocationManager lm = null;
     private LatLng selectedLocation = null;
     public static MainActivityViewModel mainActivityViewModel;
+    private MarkerOptions pointedMarker = null;
+    private String pointedAddress = "";
+    private String pointedLatlng = "";
+
+    private Button nextBtn;
+    private ImageView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_map_new);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -67,22 +77,28 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
         assert mapFragment != null;
         mapFragment.getMapAsync(MapActivity.this);
 
-        dietBtn2 = findViewById(R.id.dietBtn2);
-        dietBtn2.setOnClickListener(new View.OnClickListener() {
+        backBtn = findViewById(R.id.backBtn);
+        nextBtn = findViewById(R.id.nextBtn);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mMap != null) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getCurrentLatLng(), 15));
-                }
+                finish();
             }
         });
 
-        dietBtn = findViewById(R.id.dietBtn);
-        dietBtn.setOnClickListener(new View.OnClickListener() {
+        nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MapActivity.this, PhotoActivity.class);
-                startActivity(i);
+                if (pointedLatlng == "") return;
+
+                DietParcelable data = new DietParcelable("", "", 0, 0, ""
+                        , "", "", "", "", 0, pointedAddress, pointedLatlng);
+
+                Intent mapIntent = new Intent(MapActivity.this, PhotoActivity.class);
+
+                mapIntent.putExtra("data", data);
+                startActivity(mapIntent);
             }
         });
 
@@ -131,6 +147,21 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
             public void onMapClick(LatLng point) {
                 Toast.makeText(MapActivity.this, "" + getCurrentAddress(point),
                         Toast.LENGTH_SHORT).show();
+                pointedAddress = getCurrentAddress(point);
+                if (pointedAddress == "") {
+                    return;
+                }
+                if (pointedMarker != null) {
+                    map.clear();
+                }
+
+                pointedMarker = new MarkerOptions();
+                pointedMarker
+                        .position(new LatLng(point.latitude, point.longitude));
+                map.addMarker(pointedMarker);
+
+                pointedLatlng = point.latitude + "/" + point.longitude;
+                setNextBtnSelectedMode();
             }
         });
     }
@@ -166,17 +197,19 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
         } catch (IOException ioException) {
             //네트워크 문제
             Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
-            return "지오코더 서비스 사용불가";
+            //return "지오코더 서비스 사용불가";
+            return "";
         } catch (IllegalArgumentException illegalArgumentException) {
             Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
-            return "잘못된 GPS 좌표";
-
+//            return "잘못된 GPS 좌표";
+            return "";
         }
 
 
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
-            return "주소 미발견";
+//            return "주소 미발견";
+            return "";
 
         } else {
             Address address = addresses.get(0);
@@ -207,5 +240,15 @@ public class MapActivity extends AppCompatActivity implements GoogleMap.OnMyLoca
 //            return new LatLng(37.5666805, 126.9784147);
 //        }
         return new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void setNextBtnSelectedMode() {
+        nextBtn.setBackground(this.getResources().getDrawable(R.drawable.r12_primary_solid));
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void setNextBtnUnSelectedMode() {
+        nextBtn.setBackground(this.getResources().getDrawable(R.drawable.r12_lightgray_solid));
     }
 }

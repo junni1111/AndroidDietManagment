@@ -33,8 +33,12 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("category", data.getAddress());
+        Log.d("category", data.getLatlng());
         Log.d("category", data.getImagePath());
         Log.d("category", data.getName());
+        Log.d("category", "" + data.getCount());
+        Log.d("category", "" + data.getCalorie());
 
         addCategories();
 

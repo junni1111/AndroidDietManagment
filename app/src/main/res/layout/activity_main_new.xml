@@ -61,6 +61,7 @@
             android:layout_marginVertical="24dp">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RVdiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

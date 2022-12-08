@@ -10,35 +10,39 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dadada.app.R;
 import com.dadada.app.parcelable.DietParcelable;
 
-public class CalorieActivity extends AppCompatActivity {
+public class DietActivity extends AppCompatActivity {
     private DietParcelable data;
-    private ImageView backBtn;
+    private ImageView backBtn, minusBtn, plusBtn;
+    private EditText dietEdt;
+    private TextView dietCnt;
+    private int dietCount = 0;
     private Button nextBtn;
-    private EditText calorieEdt;
-    private String calorieInput = "";
+    private String nameInput = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calorie);
+        setContentView(R.layout.activity_diet);
 
         Intent i = getIntent();
         data = i.getParcelableExtra("data");
-        Log.d("calorie", data.getAddress());
-        Log.d("calorie", data.getLatlng());
-        Log.d("calorie", data.getImagePath());
-        Log.d("calorie", data.getName());
-        Log.d("calorie", "" + data.getCount());
+        Log.d("diet", data.getAddress());
+        Log.d("diet", data.getLatlng());
+        Log.d("diet", data.getImagePath());
 
         backBtn = findViewById(R.id.backBtn);
-        calorieEdt = findViewById(R.id.calorieEdt);
+        dietEdt = findViewById(R.id.dietEdt);
         nextBtn = findViewById(R.id.nextBtn);
+        minusBtn = findViewById(R.id.minusBtn);
+        plusBtn = findViewById(R.id.plusBtn);
+        dietCnt = findViewById(R.id.dietCnt);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,17 +51,17 @@ public class CalorieActivity extends AppCompatActivity {
             }
         });
 
-        calorieEdt.addTextChangedListener(new TextWatcher() {
+        dietEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // 입력난에 변화가 있을 시 조치
 //                Log.d("search", "'" + s.toString().trim() + "'");
 
-                calorieInput = s.toString().trim();
-                if (calorieInput.equals("")) {
-                    setNextBtnUnSelectedMode();
-                } else {
+                nameInput = s.toString().trim();
+                if (!nameInput.equals("") && dietCount != 0) {
                     setNextBtnSelectedMode();
+                } else {
+                    setNextBtnUnSelectedMode();
                 }
             }
 
@@ -72,19 +76,50 @@ public class CalorieActivity extends AppCompatActivity {
             }
         });
 
+        minusBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
+            @Override
+            public void onClick(View v) {
+                if (dietCount == 0) return;
+
+                dietCount -= 1;
+                dietCnt.setText("" + dietCount);
+
+                if (dietCount == 0) {
+                    setNextBtnUnSelectedMode();
+                    minusBtn.setBackground(getResources().getDrawable(R.drawable.ic_minus_gray));
+                }
+            }
+        });
+
+        plusBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
+            @Override
+            public void onClick(View v) {
+                if (dietCount == 0) {
+                    minusBtn.setBackground(getResources().getDrawable(R.drawable.ic_minus_blue));
+                    if (!nameInput.equals("")) {
+                        setNextBtnSelectedMode();
+                    }
+                }
+
+                dietCount += 1;
+                dietCnt.setText("" + dietCount);
+            }
+        });
+
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (calorieInput.equals("")) return;
+                if (nameInput.equals("") || dietCount == 0) return;
 
-                int calorie = Integer.valueOf(calorieInput);
-                Intent i = new Intent(CalorieActivity.this, CategoryActivity.class);
-                data.setCalorie(calorie);
+                Intent i = new Intent(DietActivity.this, CalorieActivity.class);
+                data.setName(nameInput);
+                data.setCount(dietCount);
                 i.putExtra("data", data);
                 startActivity(i);
             }
         });
-
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

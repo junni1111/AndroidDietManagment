@@ -32,9 +32,14 @@ public class QuantityActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quantity);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("quantity", data.getAddress());
+        Log.d("quantity", data.getLatlng());
         Log.d("quantity", data.getImagePath());
         Log.d("quantity", data.getName());
+        Log.d("quantity", "" + data.getCount());
+        Log.d("quantity", "" + data.getCalorie());
         Log.d("quantity", data.getCategory());
+
 
         addQuantities();
 

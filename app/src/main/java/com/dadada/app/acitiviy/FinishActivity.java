@@ -29,11 +29,16 @@ public class FinishActivity extends AppCompatActivity {
         setContentView(R.layout.activity_finish);
 
         data = getIntent().getParcelableExtra("data");
+        Log.d("finish", data.getAddress());
+        Log.d("finish", data.getLatlng());
         Log.d("finish", data.getImagePath());
         Log.d("finish", data.getName());
+        Log.d("finish", "" + data.getCount());
+        Log.d("finish", "" + data.getCalorie());
         Log.d("finish", data.getCategory());
         Log.d("finish", data.getQuantity());
-        Log.d("finish", data.getDay() + " " + data.getTime());
+        Log.d("finish", data.getDay());
+        Log.d("finish", data.getTime());
         Log.d("finish", data.getMemo());
         Log.d("finish", "" + data.getRating());
 
@@ -49,8 +54,8 @@ public class FinishActivity extends AppCompatActivity {
 
                 try {
                     Date to = transFormat.parse(from);
-                    DietLog dietLog = new DietLog(data.getName(), 1, 235,
-                            data.getImagePath(), "", "", data.getMemo(), data.getCategory()
+                    DietLog dietLog = new DietLog(data.getName(), data.getCount(), data.getCalorie(),
+                            data.getImagePath(), data.getAddress(), data.getLatlng(), data.getMemo(), data.getCategory()
                             , data.getQuantity(), data.getRating(), data.getDay(), data.getTime(), (long) to.getTime());
                     mainActivityViewModel.addNewDietLog(dietLog);
 

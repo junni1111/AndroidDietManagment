@@ -2,9 +2,8 @@ package com.dadada.app.acitiviy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dadada.app.R;
-import com.dadada.app.model.DietLogDAO;
-import com.dadada.app.model.DietLogDatabase;
 import com.dadada.app.recyclerView.DietAdapter;
 import com.dadada.app.viewmodel.MainActivityViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -28,20 +25,17 @@ import java.util.TimeZone;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView view;
-    private RecyclerView.LayoutManager layoutManager;
     public static DietAdapter adapter;
     public static MainActivityViewModel mainActivityViewModel;
     private MaterialDatePicker datePicker;
-    private String s = "";
-    private DietLogDatabase db;
-    private DietLogDAO dietLogDAO;
+    private String selectedDateString = "";
 
-    Button btn, BTdate;
+    private ImageView calendarBtn, addBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_new);
 
         view = findViewById(R.id.RVdiet);
         adapter = new DietAdapter(this);
@@ -49,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         addNewDiet();
+
+        mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> adapter.setData(dietLogs));
 
         datePicker = MaterialDatePicker.Builder
                 .datePicker()
@@ -63,47 +59,31 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
                 Date date = new Date(selectedDate + offsetFromUTC);
 
-                s = simpleFormat.format(date);
+                selectedDateString = simpleFormat.format(date);
 
-                mainActivityViewModel.setInput(s);
+                mainActivityViewModel.setInput(selectedDateString);
             }
         });
 
-        mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> adapter.setData(dietLogs));
+        calendarBtn = findViewById(R.id.calendarBtn);
+        addBtn = findViewById(R.id.addBtn);
 
-
-        TimeZone timeZoneUTC = TimeZone.getDefault();
-        // It will be negative, so that's the -1
-        int offsetFromUTC = timeZoneUTC.getOffset(new Date().getTime()) * -1;
-
-        // Create a date format, then a date object with our offset
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm", Locale.KOREA);
-        Date date = new Date(offsetFromUTC);
-
-        Date now = new Date();
-        long oneMonthBefore = (long) now.getTime() - (long) 2592000 * 1000;
-        Log.d("date", simpleFormat.format(new Date()));
-
-        mainActivityViewModel.getCaloriesAfterDate(oneMonthBefore).observe(this, calorie -> Log.d("calorie", "" + calorie));
-
-        btn = findViewById(R.id.BTcamera);
-        BTdate = findViewById(R.id.BTdate);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-        BTdate.setOnClickListener(new View.OnClickListener() {
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 datePicker.show(getSupportFragmentManager(), "fragment_tag");
             }
         });
+
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(i);
+            }
+        });
+
+
     }
 
 

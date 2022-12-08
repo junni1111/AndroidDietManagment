@@ -43,6 +43,7 @@ public class PhotoActivity extends AppCompatActivity {
     private static final int MY_GALLERY_PERMISSION_CODE = 101;
     private String currentPhotoPath = "";
     private boolean isPhotoSelected = false;
+    private DietParcelable data;
 
     ImageView photoBtn, backBtn;
     Button takePhotoBtn, selectPhotoBtn, nextBtn;
@@ -53,6 +54,10 @@ public class PhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
+        data = getIntent().getParcelableExtra("data");
+        Log.d("photo", data.getAddress());
+        Log.d("photo", data.getLatlng());
+
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.bottom_sheet_group_photo, null, false);
@@ -60,7 +65,7 @@ public class PhotoActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        photoBtn = findViewById(R.id.photoBtn);
+        photoBtn = findViewById(R.id.memoryImage);
         backBtn = findViewById(R.id.backBtn);
         nextBtn = findViewById(R.id.nextBtn);
         takePhotoBtn = bottomSheetDialog.findViewById(R.id.takePhotoBtn);
@@ -114,10 +119,8 @@ public class PhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currentPhotoPath.equals("") || !isPhotoSelected) return;
-                Intent searchIntent = new Intent(PhotoActivity.this, SearchActivity.class);
+                Intent searchIntent = new Intent(PhotoActivity.this, DietActivity.class);
 
-                DietParcelable data = new DietParcelable("", "", 0, ""
-                        , "", "", "", "", 0);
                 data.setImagePath(currentPhotoPath);
                 searchIntent.putExtra("data", data);
                 startActivity(searchIntent);

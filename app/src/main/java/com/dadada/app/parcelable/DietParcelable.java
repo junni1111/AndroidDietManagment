@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class DietParcelable implements Parcelable {
     private String imagePath;
     private String name;
+    private int count;
     private int calorie;
     private String category;
     private String quantity;
@@ -13,6 +14,32 @@ public class DietParcelable implements Parcelable {
     private String time;
     private String memo;
     private int rating;
+    private String address;
+    private String latlng;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLatlng() {
+        return latlng;
+    }
+
+    public void setLatlng(String latlng) {
+        this.latlng = latlng;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -86,10 +113,11 @@ public class DietParcelable implements Parcelable {
         this.rating = rating;
     }
 
-    public DietParcelable(String imagePath, String name, int calorie, String category, String quantity,
-                          String day, String time, String memo, int rating) {
+    public DietParcelable(String imagePath, String name, int count, int calorie, String category, String quantity,
+                          String day, String time, String memo, int rating, String address, String latlng) {
         this.imagePath = imagePath;
         this.name = name;
+        this.count = count;
         this.calorie = calorie;
         this.category = category;
         this.quantity = quantity;
@@ -97,11 +125,14 @@ public class DietParcelable implements Parcelable {
         this.time = time;
         this.memo = memo;
         this.rating = rating;
+        this.address = address;
+        this.latlng = latlng;
     }
 
     protected DietParcelable(Parcel in) {
         imagePath = in.readString();
         name = in.readString();
+        count = in.readInt();
         calorie = in.readInt();
         category = in.readString();
         quantity = in.readString();
@@ -109,6 +140,8 @@ public class DietParcelable implements Parcelable {
         time = in.readString();
         memo = in.readString();
         rating = in.readInt();
+        address = in.readString();
+        latlng = in.readString();
     }
 
     @Override
@@ -120,6 +153,7 @@ public class DietParcelable implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(imagePath);
         dest.writeString(name);
+        dest.writeInt(count);
         dest.writeInt(calorie);
         dest.writeString(category);
         dest.writeString(quantity);
@@ -127,6 +161,8 @@ public class DietParcelable implements Parcelable {
         dest.writeString(time);
         dest.writeString(memo);
         dest.writeInt(rating);
+        dest.writeString(address);
+        dest.writeString(latlng);
     }
 
     public static final Creator<DietParcelable> CREATOR = new Creator<DietParcelable>() {
