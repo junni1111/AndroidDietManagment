@@ -35,7 +35,8 @@
                     <ImageView
                         android:id="@+id/posterViewImg"
                         android:layout_width="match_parent"
-                        android:layout_height="290dp" />
+                        android:layout_height="290dp"
+                        android:scaleType="centerCrop" />
 
                     <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/toolbar"
@@ -57,13 +58,13 @@
                             android:padding="11.5dp"
                             android:src="@drawable/ic_arrow" />
 
-                        <TextView
-                            android:id="@+id/memoryTopTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="식사 제목"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                        <!--                        <TextView-->
+                        <!--                            android:id="@+id/memoryTopTitle"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:text="식사 제목"-->
+                        <!--                            android:textSize="16sp"-->
+                        <!--                            android:textStyle="bold" />-->
 
                         <ImageView
                             android:id="@+id/dotsBtn"
@@ -157,12 +158,18 @@
                         app:srb_starPadding="3dp"
                         app:srb_starWidth="15dp" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/dietCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="20dp"
-                        android:src="@drawable/ic_light"
+                        android:text="가볍게"
+                        android:textColor="#292F34"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:background="@drawable/ic_light"
                         app:layout_constraintStart_toStartOf="@id/dietDate"
                         app:layout_constraintTop_toBottomOf="@id/dietDate" />
 

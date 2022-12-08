@@ -100,6 +100,13 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
             dietTitle.setText(diet.getFoodName());
             dietDateTime.setText(date);
 
+            heartBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    heartBtn.setImageResource(R.drawable.ic_heart_full);
+                }
+            });
+
             try {
                 File file = new File(diet.getImagePath());
                 Glide.with(context).load(Uri.fromFile(file)).into(itemImg);

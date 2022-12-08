@@ -94,7 +94,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     void setAdapter(RecyclerView view, ItemAdapter adapter) {
-        view.setLayoutManager(new LinearLayoutManager(this));
+        view.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         view.setHasFixedSize(true);
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);

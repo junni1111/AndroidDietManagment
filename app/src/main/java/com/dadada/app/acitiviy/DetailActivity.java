@@ -35,6 +35,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
     private TextView dietTitle;
     private TextView dietDate;
     private BaseRatingBar memoryDetailRating;
+    private TextView dietCategory;
     private TextView memoTxt;
     private TextView mapLocation;
 
@@ -67,6 +68,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
         dietTitle = findViewById(R.id.dietTitle);
         dietDate = findViewById(R.id.dietDate);
         memoryDetailRating = findViewById(R.id.memoryDetailRating);
+        dietCategory = findViewById(R.id.dietCategory);
         memoTxt = findViewById(R.id.memoTxt);
         mapLocation = findViewById(R.id.mapLocation);
 
@@ -92,6 +94,8 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
         dietDate.setText(date);
 
         memoryDetailRating.setRating(data.getRating());
+
+        dietCategory.setText(data.getQuantity());
 
         if (data.getMemo().equals("")) {
             memoTxt.setText("메모가 없습니다.");

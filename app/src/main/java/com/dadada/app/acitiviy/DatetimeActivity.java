@@ -49,10 +49,12 @@ public class DatetimeActivity extends AppCompatActivity {
         Log.d("datetime", data.getQuantity());
 
         SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.KOREA);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm", Locale.KOREA);
         Date now = new Date();
         selectedDay = dayFormat.format(now);
-        selectedTime = timeFormat.format(now);
+        int hour = Integer.parseInt(timeFormat.format(now).split(":")[0]);
+        int minute = Integer.parseInt(timeFormat.format(now).split(":")[1]);
+        selectedTime = "" + hour + ":" + minute;
 
 
         backBtn = findViewById(R.id.backBtn);
@@ -71,8 +73,8 @@ public class DatetimeActivity extends AppCompatActivity {
                 .build();
 
         timePicker = new MaterialTimePicker.Builder()
-                .setHour(Integer.parseInt(timeFormat.format(now).split(":")[0]))
-                .setMinute(Integer.parseInt(timeFormat.format(now).split(":")[1]))
+                .setHour(hour)
+                .setMinute(minute)
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .build();
 
