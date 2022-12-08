@@ -2,6 +2,7 @@ package com.dadada.app.acitiviy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dadada.app.R;
+import com.dadada.app.model.DietLog;
 import com.dadada.app.recyclerView.DietAdapter;
 import com.dadada.app.viewmodel.MainActivityViewModel;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -44,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         addNewDiet();
 
-        mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> adapter.setData(dietLogs));
+        mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> {
+            adapter.setData(dietLogs);
+            for (DietLog log : dietLogs) {
+                Log.d("", log.getAddress());
+            }
+        });
 
         datePicker = MaterialDatePicker.Builder
                 .datePicker()
