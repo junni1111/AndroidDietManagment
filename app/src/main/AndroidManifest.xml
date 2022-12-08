@@ -26,6 +26,13 @@
         android:theme="@style/Theme.DADADA.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".acitiviy.DetailActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".acitiviy.CalorieActivity"
             android:exported="false">
             <meta-data

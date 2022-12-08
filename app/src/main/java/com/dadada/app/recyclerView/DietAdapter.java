@@ -2,6 +2,7 @@ package com.dadada.app.recyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dadada.app.R;
+import com.dadada.app.acitiviy.DetailActivity;
 import com.dadada.app.model.DietLog;
+import com.dadada.app.parcelable.DietParcelable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -107,6 +110,13 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    DietParcelable data = new DietParcelable(diet.getImagePath(), diet.getFoodName(), diet.getFoodCount(),
+                            diet.getFoodCalorie(), diet.getCategories(), diet.getQuantity(), diet.getDay(), diet.getTime(),
+                            diet.getMemo(), diet.getRating(), diet.getAddress(), diet.getLatlng());
+
+                    Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("data", data);
+                    context.startActivity(i);
                 }
             });
         }
