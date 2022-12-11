@@ -12,10 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dadada.app.R;
 import com.dadada.app.parcelable.DietParcelable;
+import com.dadada.app.recyclerView.CategoryAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.willy.ratingbar.BaseRatingBar;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback {
@@ -33,11 +38,14 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
     private GoogleMap mMap = null;
     private ImageView posterViewImg;
     private TextView dietTitle;
+    private TextView itemCCTV;
     private TextView dietDate;
     private BaseRatingBar memoryDetailRating;
-    private TextView dietCategory;
+    private TextView dietQuantity;
     private TextView memoTxt;
     private TextView mapLocation;
+    private RecyclerView dietDetailTagList;
+    private CategoryAdapter categoryAdapter;
 
 
     @Override
@@ -66,21 +74,44 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
 
         posterViewImg = findViewById(R.id.posterViewImg);
         dietTitle = findViewById(R.id.dietTitle);
+        itemCCTV = findViewById(R.id.itemCCTV);
         dietDate = findViewById(R.id.dietDate);
         memoryDetailRating = findViewById(R.id.memoryDetailRating);
-        dietCategory = findViewById(R.id.dietCategory);
+        dietQuantity = findViewById(R.id.dietQuantity);
         memoTxt = findViewById(R.id.memoTxt);
+        dietDetailTagList = findViewById(R.id.dietDetailTagList);
         mapLocation = findViewById(R.id.mapLocation);
 
+        setPosterViewImg();
+        setDietTitle();
+        setItemCCTV();
+        setDietDate();
+        setMemoryDetailRating();
+        setDietCategory();
+        setMemoTxt();
+        setDietDetailTagList();
+        setMapLocation();
+
+    }
+
+    private void setPosterViewImg() {
         try {
             File file = new File(data.getImagePath());
             Glide.with(this).load(Uri.fromFile(file)).into(posterViewImg);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void setItemCCTV() {
+        itemCCTV.setText(String.format("%d개 %dKcal", data.getCount(), data.getCalorie()));
+    }
+
+    private void setDietTitle() {
         dietTitle.setText(data.getName());
+    }
 
+    private void setDietDate() {
         String date = data.getDay() + " ";
         int hour = Integer.parseInt(data.getTime().split(":")[0]);
         int minute = Integer.parseInt(data.getTime().split(":")[1]);
@@ -92,20 +123,43 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
             date += "오후 " + "" + hour + ":" + minute;
         }
         dietDate.setText(date);
+    }
 
+    private void setMemoryDetailRating() {
         memoryDetailRating.setRating(data.getRating());
+    }
 
-        dietCategory.setText(data.getQuantity());
+    private void setDietCategory() {
+        dietQuantity.setText(data.getQuantity());
+    }
 
+    private void setMemoTxt() {
         if (data.getMemo().equals("")) {
             memoTxt.setText("메모가 없습니다.");
         } else {
             memoTxt.setText(data.getMemo());
         }
-
-        mapLocation.setText(data.getAddress());
-
     }
+
+    private void setDietDetailTagList() {
+        ArrayList<String> categories = new ArrayList<>();
+        for (String category : data.getCategory().split("[. ]")) {
+            if (category.trim().equals("")) continue;
+            categories.add(category);
+        }
+        categoryAdapter = new CategoryAdapter(categories);
+
+        dietDetailTagList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        dietDetailTagList.setHasFixedSize(true);
+        dietDetailTagList.setItemAnimator(new DefaultItemAnimator());
+        dietDetailTagList.setAdapter(categoryAdapter);
+    }
+
+
+    private void setMapLocation() {
+        mapLocation.setText(data.getAddress());
+    }
+
 
     @Override
     public void onMapReady(@NonNull GoogleMap map) {

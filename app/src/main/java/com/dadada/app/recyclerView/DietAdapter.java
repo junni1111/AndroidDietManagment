@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,12 +27,27 @@ import java.util.List;
 public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
     private Context context;
     private List<DietLog> diets;
-    private LayoutInflater layoutInflater;
+    private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
 
     @Override
     public void onBindViewHolder(@NonNull DietHolder holder, int position) {
         DietLog diet = diets.get(position);
         holder.setDetail(diet);
+
+
+//        CategoryAdapter categoryAdapter = new CategoryAdapter(
+//                new ArrayList(Arrays.asList(diet.getCategories().split("."))));
+        ArrayList<String> categories = new ArrayList<>();
+        for (String category : diet.getCategories().split("[. ]")) {
+            if (category.trim().equals("")) continue;
+            categories.add(category);
+        }
+
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categories);
+
+        holder.categoryView.setLayoutManager(new LinearLayoutManager(holder.categoryView.getContext(), RecyclerView.HORIZONTAL, false));
+        holder.categoryView.setAdapter(categoryAdapter);
+        holder.categoryView.setRecycledViewPool(viewPool);
     }
 
     @Override
@@ -52,7 +68,6 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
     public DietAdapter(Context context) {
         diets = new ArrayList<>();
         this.context = context;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -75,6 +90,8 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
 
         private ImageView itemImg, heartBtn;
         private TextView dietTitle, dietDateTime;
+        private RecyclerView categoryView;
+
 
         public DietHolder(@NonNull View itemView) {
             super(itemView);
@@ -82,6 +99,7 @@ public class DietAdapter extends RecyclerView.Adapter<DietAdapter.DietHolder> {
             heartBtn = itemView.findViewById(R.id.heartBtn);
             dietTitle = itemView.findViewById(R.id.dietTitle);
             dietDateTime = itemView.findViewById(R.id.dietDateTime);
+            categoryView = itemView.findViewById(R.id.tagList);
 
         }
 

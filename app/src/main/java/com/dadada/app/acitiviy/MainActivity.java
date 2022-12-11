@@ -44,12 +44,11 @@ public class MainActivity extends AppCompatActivity {
         setAdapter();
 
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        addNewDiet();
 
         mainActivityViewModel.dietLogByDay.observe(this, dietLogs -> {
             adapter.setData(dietLogs);
             for (DietLog log : dietLogs) {
-                Log.d("", log.getAddress());
+                Log.d("FFFFFFFFFFFFF", log.getCategories());
             }
         });
 
@@ -100,13 +99,4 @@ public class MainActivity extends AppCompatActivity {
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
     }
-
-    void addNewDiet() {
-        Intent i = getIntent();
-        if (i.getExtras() != null) {
-            String currentPhotoPath = i.getStringExtra("imgPath");
-            //mainActivityViewModel.addNewDietLog(new DietLog("김밥", 1, 123, currentPhotoPath, "서울특별시", "2020-03-01", "09:00:00"));
-        }
-    }
-
 }

@@ -67,7 +67,7 @@ public class CategoryActivity extends AppCompatActivity {
                 for (int idx = 0; idx < isChecked.length; idx++) {
                     if (isChecked[idx]) {
                         String category = categories.get(idx);
-                        categoryString.append(".").append(category);
+                        categoryString.append(category).append(".");
                     }
                 }
 
