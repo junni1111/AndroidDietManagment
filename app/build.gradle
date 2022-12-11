@@ -58,8 +58,8 @@ dependencies {
 
     //simpleRatingBar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
-
-    // CircleProgressBar
-    implementation 'com.zekapp.library:progreswheelview:1.1.5'
+//
+//    // CircleProgressBar
+//    implementation 'com.zekapp.library:progreswheelview:1.1.5'
 
 }

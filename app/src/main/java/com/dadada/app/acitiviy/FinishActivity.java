@@ -60,14 +60,12 @@ public class FinishActivity extends AppCompatActivity {
                     mainActivityViewModel.addNewDietLog(dietLog);
 
 
-                    Intent i = new Intent(FinishActivity.this, MainActivity.class);
+                    Intent i = new Intent(FinishActivity.this, SummaryActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
 
