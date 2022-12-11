@@ -150,7 +150,6 @@ public class DetailActivity extends AppCompatActivity implements GoogleMap.OnMyL
         categoryAdapter = new CategoryAdapter(categories);
 
         dietDetailTagList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        dietDetailTagList.setHasFixedSize(true);
         dietDetailTagList.setItemAnimator(new DefaultItemAnimator());
         dietDetailTagList.setAdapter(categoryAdapter);
     }

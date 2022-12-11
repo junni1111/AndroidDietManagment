@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
     void setAdapter() {
         view.setLayoutManager(new LinearLayoutManager(this));
-        view.setHasFixedSize(true);
         view.setItemAnimator(new DefaultItemAnimator());
         view.setAdapter(adapter);
     }
